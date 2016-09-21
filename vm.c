@@ -20,6 +20,20 @@ int bp = 1;
 int pc = 0;
 instruction ir;
 
+// Instruction Code
+char* instCode = {
+	"",
+	"LIT",
+	"OPR",
+	"LOD",
+	"STO",
+	"CAL",
+	"INC",
+	"JMP",
+	"JPC",
+	"SIO"
+}
+
 int stack[MAX_STACK_HEIGHT];
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
@@ -32,20 +46,20 @@ void readPM0()
 	{
 		fscanf(fp, "%d", l);
 		fscanf(fp, "%d", m);
-		
+
 		code[i].op = op;
 		code[i].l = l;
 		code[i].m = m;
 		i++;
 	}
-	
+
 	code_length = i;
 }
 
 void printCode()
 {
 	int i;
-	
+
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
 		printf("%d %d %d %d\n", i, code[i].op, code[i].l, code[i].m);
