@@ -1,4 +1,7 @@
 // Compiler Builder 16
+// Kenneth Mitchell
+// Georg Anemogiannis
+// David Israwi Yordi
 // Tyler Chauhan
 
 #include <stdlib.h>
@@ -21,7 +24,7 @@ int pc = 0;
 instruction ir;
 
 // Instruction Code
-char* instCode = {
+char* instCode[] = {
 	"",
 	"LIT",
 	"OPR",
@@ -142,5 +145,19 @@ void JPC()
 }
 void SIO()
 {
-
+	switch(ir.m) {
+		case 0:
+			printf("%d", stack[sp]);
+			sp--;
+			break;
+		case 1:
+			sp++;
+			// read(stack[sp])
+			break;
+		case 2:
+			halt()
+			break;
+		default:
+			break;
+	}
 }
