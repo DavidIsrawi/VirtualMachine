@@ -70,3 +70,77 @@ void fetchCycle()
 	ir = code[pc];
 	pc++;
 }
+
+void executeCycle()
+{
+	switch (ir.op)
+	{
+	case 01: LIT();
+		break;
+	case 02: OPR();
+		break;
+	case 03: LOD();
+		break;
+	case 04: STO();
+		break;
+	case 05: CAL();
+		break;
+	case 06: INC();
+		break;
+	case 07: JMP();
+		break;
+	case 08: JPC();
+		break;
+	case 09: SIO();
+		break;
+	}
+}
+
+void LIT()
+{
+	sp++;
+	stack[sp] = ir.m;
+}
+void OPR()
+{
+
+}
+void LOD()
+{
+	sp++;
+	stack[s] = stack[base(L, bp) + m]];
+}
+void STO()
+{
+	stack[base(L, bp) + m] = stack[sp];
+	sp--;
+}
+void CAL()
+{
+	stack[sp + 1] = 0;
+	stack[sp + 2] = base(L, bp);
+	stack[sp + 3] = bp;
+	stack[sp + 4] = pc;
+	bp = sp + 1;
+	pc = M;
+}
+void INC()
+{
+	sp += m;
+}
+void JMP()
+{
+	pc = m;
+}
+void JPC()
+{
+	if (stack[sp] == 0)
+	{
+		pc = m;
+	}
+	sp--;
+}
+void SIO()
+{
+
+}
