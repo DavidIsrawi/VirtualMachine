@@ -57,6 +57,7 @@ void readPM0();
 void printCode();
 void fetchCycle();
 void executeCycle();
+void runPM0();
 
 //Computes the base of AR L levels down
 int base(int level, int b)
@@ -70,9 +71,8 @@ int base(int level, int b)
 	return b;
 }
 
-void readPM0()
+void readPM0(FILE *fp)
 {
-	FILE *fp = fopen("mcode.pm0", "r");
 	int op, l, m, i = 0;
 	while (fscanf(fp, "%d", &op) != EOF)
 	{
@@ -95,6 +95,25 @@ void printCode()
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
 		printf("%d %s %d %d\n", i, instCode[code[i].op], code[i].l, code[i].m);
+	printf("\n");
+}
+
+void runPM0()
+{
+	printf("Execution:\n");
+	printf("\t\t\t\tpc\tbp\tsp\tstack\n");
+	printf("\t\t\t\t %d\t %d\t %d\n", pc, bp, sp);
+	while (code_length > 0)
+	{
+		fetchCycle();
+		executeCycle();
+		printf("%d\t%s\t%d\t%d", pc, instCode[code[pc].op], code[pc].l, code[pc].m);
+		printf("\t%d\t %d\t %d\n", pc, bp, sp);
+		
+		//need a function to print the stack as well
+		
+		code_length--;
+	}
 }
 
 void fetchCycle()
@@ -258,9 +277,6 @@ void SIO()
 
 int main(int argc, char **argv)
 {
-	//initial stack values
-	stack[1] = 0;
-	stack[2] = 0;
-	stack[3] = 0;
+	
 	return 0;
 }
