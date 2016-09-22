@@ -38,7 +38,7 @@ char* instCode[] = {
 	"SIO"
 };
 
-int stack[MAX_STACK_HEIGHT];
+int stack[MAX_STACK_HEIGHT] = {0, 0, 0};
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
