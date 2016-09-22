@@ -41,6 +41,18 @@ int stack[MAX_STACK_HEIGHT];
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
+//Computes the base of AR L levels down
+int base(int level, int b)
+{
+	while(level > 0)
+	{
+		b = stack[b + 1];
+		level--;
+	}
+
+	return b;
+}
+
 void readPM0()
 {
 	FILE *fp = fopen("mcode.pm0", "r")
@@ -106,6 +118,64 @@ void LIT()
 }
 void OPR()
 {
+    switch(ir.m)
+    {
+        case 0: //RET
+            sp = bp – 1;
+            pc = stack[sp + 4];
+            bp = stack[sp + 3];
+            break;
+        case 1: //NEG
+            stack[sp] = -stack[sp];
+            break;
+        case 2: //ADD
+           sp--;
+           stack[sp] = stack[sp] + stack[sp + 1];
+           break;
+        case 3: //SUB
+            sp--;
+            stack[sp] = stack[sp] - stack[sp + 1];
+            break;
+        case 4: //MUL
+            sp--;
+            stack[sp] = stack[sp] * stack[sp + 1];
+            break;
+        case 5: //DIV
+            sp--;
+            stack[sp] = stack[sp] / stack[sp + 1];
+            break;
+        case 6: //ODD
+            stack[sp] = stack[sp] % 2;
+            break;
+        case 7: //MOD
+            sp--;
+            stack[sp] = stack[sp] % stack[sp + 1];
+            break;
+        case 8: //EQL
+            sp--;
+            stack[sp] = stack[sp] == stack[sp + 1];
+            break;
+        case 9: //NEQ
+            sp--;
+            stack[sp] = stack[sp] != stack[sp + 1];
+            break;
+        case 10: //LSS
+            sp--;
+            stack[sp] = stack[sp] <  stack[sp + 1];
+            break;
+        case 11: //LEQ
+            sp--;
+            stack[sp] = stack[sp] <= stack[sp + 1];
+            break;
+        case 12: //GTR
+            sp--;
+            stack[sp] = stack[sp] >  stack[sp + 1];
+            break;
+        case 13: //GEQ
+            sp--;
+            stack[sp] = stack[sp] >= stack[sp + 1];
+            break;
+    }
 
 }
 void LOD()
