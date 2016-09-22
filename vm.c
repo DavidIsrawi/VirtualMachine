@@ -38,7 +38,7 @@ char* instCode[] = {
 	"SIO"
 };
 
-int stack[MAX_STACK_HEIGHT];
+int stack[MAX_STACK_HEIGHT] = {0, 0, 0};
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
@@ -78,7 +78,7 @@ void printCode()
 
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
-		printf("%d %d %d %d\n", i, code[i].op, code[i].l, code[i].m);
+		printf("%d %s %d %d\n", i, instCode[code[i].op], code[i].l, code[i].m);
 }
 
 void fetchCycle()
@@ -228,6 +228,7 @@ void JPC()
 }
 void SIO()
 {
+	int input;
 	switch (ir.m)
 	{
 	case 0:
@@ -236,7 +237,9 @@ void SIO()
 		break;
 	case 1:
 		sp++;
-		// read(stack[sp])
+		printf("Enter a value to push onto the stack: ");
+		scanf("%d", &input);
+		stack[sp] = input;
 		break;
 	case 2:
 		//	halt();
