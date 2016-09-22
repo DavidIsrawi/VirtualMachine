@@ -41,6 +41,18 @@ int stack[MAX_STACK_HEIGHT];
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
+//Computes the base of AR L levels down
+int base(int level, int b)
+{
+	while(level > 0)
+	{
+		b = stack[b + 1];
+		level--;
+	}
+
+	return b;
+}
+
 void readPM0()
 {
 	FILE *fp = fopen("mcode.pm0", "r")
