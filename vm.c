@@ -38,11 +38,7 @@ char* instCode[] = {
 	"SIO"
 };
 
-<<<<<<< HEAD
 int stack[MAX_STACK_HEIGHT] = {0, 0, 0};
-=======
-int stack[MAX_STACK_HEIGHT];
->>>>>>> upstream/master
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
@@ -232,10 +228,7 @@ void JPC()
 }
 void SIO()
 {
-<<<<<<< HEAD
 	int input;
-=======
->>>>>>> upstream/master
 	switch (ir.m)
 	{
 	case 0:
@@ -244,13 +237,9 @@ void SIO()
 		break;
 	case 1:
 		sp++;
-<<<<<<< HEAD
 		printf("Enter a value to push onto the stack: ");
 		scanf("%d", &input);
 		stack[sp] = input;
-=======
-		// read(stack[sp])
->>>>>>> upstream/master
 		break;
 	case 2:
 		//	halt();
