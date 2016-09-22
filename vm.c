@@ -4,6 +4,8 @@
 // David Israwi Yordi
 // Tyler Chauhan
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -277,6 +279,12 @@ void SIO()
 
 int main(int argc, char **argv)
 {
-	
+
+	argc--; argv++;
+	FILE* fo = fopen(*argv, "rb");
+
+	readPM0(fo);
+	runPM0();
+
 	return 0;
 }
