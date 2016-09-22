@@ -1,0 +1,7 @@
+//Team name: Compiler Builder 16
+//Kenneth Mitchell
+//Georg Anemogiannis
+//David Israwi Yordi
+//Tyler Chauhan
+
+Collaboration file highlighting the contributions of each team member:
