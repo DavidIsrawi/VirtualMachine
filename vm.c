@@ -42,6 +42,17 @@ int stack[MAX_STACK_HEIGHT] = {0, 0, 0};
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
+//function declarations
+void LIT();
+void OPR();
+void LOD();
+void STO();
+void CAL();
+void INC();
+void JMP();
+void JPC();
+void SIO();
+
 //Computes the base of AR L levels down
 int base(int level, int b)
 {
@@ -72,6 +83,11 @@ void readPM0()
 	code_length = i;
 }
 
+void executePM0()
+{
+	
+}
+
 void printCode()
 {
 	int i;
@@ -79,6 +95,9 @@ void printCode()
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
 		printf("%d %s %d %d\n", i, instCode[code[i].op], code[i].l, code[i].m);
+	
+	printf("\nExecution:\n ");
+	printf("\t\t\t\t pc\tbp\tsp\tstack\n");
 }
 
 void fetchCycle()
@@ -86,17 +105,6 @@ void fetchCycle()
 	ir = code[pc];
 	pc++;
 }
-
-//function declarations
-void LIT();
-void OPR();
-void LOD();
-void STO();
-void CAL();
-void INC();
-void JMP();
-void JPC();
-void SIO();
 
 void executeCycle()
 {
