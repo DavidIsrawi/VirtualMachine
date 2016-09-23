@@ -12,6 +12,7 @@
 #define MAX_CODE_LENGTH 500
 #define MAX_LEXI_LEVELS 3
 
+// Instruction struct
 typedef struct
 {
 	int op;
@@ -26,6 +27,7 @@ int pc = 0;
 instruction ir;
 
 // Instruction Code
+// first index is empty string to accomodate the opcode to its correct value
 char* instCode[] = {
 	"",
 	"LIT",
@@ -62,11 +64,12 @@ char* SIOCode[] = {
 	"HLT",
 };
 
+// Initial stack values
 int stack[MAX_STACK_HEIGHT] = { 0, 0, 0 };
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
-//function declarations
+// Function declarations
 void LIT();
 void OPR();
 void LOD();
@@ -103,6 +106,7 @@ void readPM0(FILE *fp)
 		fscanf(fp, "%d", &l);
 		fscanf(fp, "%d", &m);
 
+		// Update values
 		code[i].op = op;
 		code[i].l = l;
 		code[i].m = m;
@@ -139,7 +143,7 @@ void printCode()
 
 void runPM0()
 {
-	printf("Execution:\n"); 
+	printf("Execution:\n");
 	printf("\t\t\t\tpc\tbp\tsp\tstack\n");
 	printf("\t\t\t\t %d\t %d\t %d\n", pc, bp, sp);
 	while (code_length > 0)
@@ -162,8 +166,8 @@ void runPM0()
 		printf("\t");
 
 		//print stack
-		int x = 1;
-		for (x; x <= sp; x++)
+		int x;
+		for (x = 1; x <= sp; x++)
 		{
 			if (x == 7 && sp > 7)
 				printf("| ");
