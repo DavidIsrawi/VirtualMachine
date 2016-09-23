@@ -5,3 +5,16 @@
 //Tyler Chauhan
 
 Collaboration file highlighting the contributions of each team member:
+For the virtual machine (vm.c) we collaborated using GitHub and Slack to write
+the code for the virtual machine and communicate effectively. Due to the fact
+that we all played a part and didn't have set tasks for each member, below
+we have supplied our GitHub usernames and the repository where we worked on
+vm.c and from there one will be able to see everyone's contribution.
+
+GitHub Usernames:
+Kenneth Mitchell - https://github.com/kennethmitchelljr
+Georg Anemogiannis - https://github.com/Ganemo
+David Israwi Yordi - https://github.com/DavidIsrawi
+Tyler Chauhan - https://github.com/tjchauhan
+
+Repository: https://github.com/DavidIsrawi/VirtualMachine
