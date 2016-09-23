@@ -4,7 +4,6 @@
 // David Israwi Yordi
 // Tyler Chauhan
 
-#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -119,26 +118,58 @@ void printCode()
 
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
-		printf("%d\t%s\t%d\t%d\n", i, instCode[code[i].op], code[i].l, code[i].m);
+	{
+		if (code[i].op == 4 || code[i].op == 5)
+			printf("%d\t%s\t%d\t%d", i, instCode[code[i].op], code[i].l, code[i].m);
+		else if (code[i].op == 9)
+			printf("%d\t%s\t \t ", i, SIOCode[code[i].m]);
+		else if (code[i].op == 2)
+			if (code[i].m != 0)
+				printf("%d\t%s\t \t%d", i, OPRCode[code[i].m], code[i].m);
+			else
+				printf("%d\t%s\t \t ", i, OPRCode[code[i].m]);
+		else
+			printf("%d\t%s\t \t%d", i, instCode[code[i].op], code[i].m);
+
+		printf("\n");
+	}
+
 	printf("\n");
 }
 
 void runPM0()
 {
-	printf("Execution:\n");
+	printf("Execution:\n"); 
 	printf("\t\t\t\tpc\tbp\tsp\tstack\n");
 	printf("\t\t\t\t %d\t %d\t %d\n", pc, bp, sp);
 	while (code_length > 0)
 	{
-		if (code[pc].op != 4 && code[pc].op != 5)
-			printf("%d\t%s\t \t%d", pc, code[pc].op != 2 && code[pc].op != 9 ? instCode[code[pc].op] : code[pc].op == 2 ? OPRCode[code[pc].m] : SIOCode[code[pc].m], code[pc].m);
-		else
+		if (code[pc].op == 4 || code[pc].op == 5)
 			printf("%d\t%s\t%d\t%d", pc, instCode[code[pc].op], code[pc].l, code[pc].m);
+		else if(code[pc].op == 9)
+			printf("%d\t%s\t \t ", pc, SIOCode[code[pc].m]);
+		else if (code[pc].op == 2)
+			if(code[pc].m != 0)
+				printf("%d\t%s\t \t%d", pc, OPRCode[code[pc].m], code[pc].m);
+			else
+				printf("%d\t%s\t \t ", pc, OPRCode[code[pc].m]);
+		else
+			printf("%d\t%s\t \t%d", pc, instCode[code[pc].op], code[pc].m);
 
 		fetchCycle();
 		executeCycle();
-		printf("\t%d\t %d\t %d\n", pc, bp, sp);
-		//need a function to print the stack as well
+		printf("\t%d\t %d\t %d", pc, bp, sp);
+		printf("\t");
+
+		//print stack
+		int x = 1;
+		for (x; x <= sp; x++)
+		{
+			if (x == 7 && sp > 7)
+				printf("| ");
+			printf("%d ", stack[x]);
+		}
+		printf("\n");
 
 		code_length--;
 	}
