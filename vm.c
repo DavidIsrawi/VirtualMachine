@@ -4,6 +4,7 @@
 // David Israwi Yordi
 // Tyler Chauhan
 
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -118,7 +119,7 @@ void printCode()
 
 	printf("PL/0 code:\n\n");
 	for (i = 0; i < code_length; i++)
-		printf("%d %s %d %d\n", i, instCode[code[i].op], code[i].l, code[i].m);
+		printf("%d\t%s\t%d\t%d\n", i, instCode[code[i].op], code[i].l, code[i].m);
 	printf("\n");
 }
 
@@ -307,8 +308,8 @@ int main(int argc, char **argv)
 	char* foo = *argv;
 	FILE* fo = fopen(foo, "rb");
 
-	printCode();
 	readPM0(fo);
+	printCode();
 	runPM0();
 
 	return 0;
