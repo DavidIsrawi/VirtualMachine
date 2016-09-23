@@ -4,7 +4,6 @@
 // David Israwi Yordi
 // Tyler Chauhan
 
-#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,7 +39,30 @@ char* instCode[] = {
 	"SIO"
 };
 
-int stack[MAX_STACK_HEIGHT] = {0, 0, 0};
+char* OPRCode[] = {
+	"RET",
+	"NEG",
+	"ADD",
+	"SUB",
+	"MUL",
+	"DIV",
+	"ODD",
+	"MOD",
+	"EQL",
+	"NEQ",
+	"LSS",
+	"LEQ",
+	"GTR",
+	"GEQ"
+};
+
+char* SIOCode[] = {
+	"OUT",
+	"INP",
+	"HLT",
+};
+
+int stack[MAX_STACK_HEIGHT] = { 0, 0, 0 };
 instruction code[MAX_CODE_LENGTH];
 int code_length = 0;
 
@@ -55,7 +77,7 @@ void JMP();
 void JPC();
 void SIO();
 int base(int level, int b);
-void readPM0();
+void readPM0(FILE *fp);
 void printCode();
 void fetchCycle();
 void executeCycle();
@@ -107,13 +129,16 @@ void runPM0()
 	printf("\t\t\t\t %d\t %d\t %d\n", pc, bp, sp);
 	while (code_length > 0)
 	{
+		if (code[pc].op != 4 && code[pc].op != 5)
+			printf("%d\t%s\t \t%d", pc, code[pc].op != 2 && code[pc].op != 9 ? instCode[code[pc].op] : code[pc].op == 2 ? OPRCode[code[pc].m] : SIOCode[code[pc].m], code[pc].m);
+		else
+			printf("%d\t%s\t%d\t%d", pc, instCode[code[pc].op], code[pc].l, code[pc].m);
+
 		fetchCycle();
 		executeCycle();
-		printf("%d\t%s\t%d\t%d", pc, instCode[code[pc].op], code[pc].l, code[pc].m);
 		printf("\t%d\t %d\t %d\n", pc, bp, sp);
-		
 		//need a function to print the stack as well
-		
+
 		code_length--;
 	}
 }
@@ -123,8 +148,6 @@ void fetchCycle()
 	ir = code[pc];
 	pc++;
 }
-
-
 
 void executeCycle()
 {
@@ -263,14 +286,14 @@ void SIO()
 		printf("%d", stack[sp]);
 		sp--;
 		break;
-	case 1:
+	case 1: //input value
 		sp++;
 		printf("Enter a value to push onto the stack: ");
 		scanf("%d", &input);
 		stack[sp] = input;
 		break;
-	case 2:
-		//	halt();
+	case 2: //halt code
+		code_length = 0;
 		break;
 	default:
 		break;
@@ -281,8 +304,10 @@ int main(int argc, char **argv)
 {
 
 	argc--; argv++;
-	FILE* fo = fopen(*argv, "rb");
+	char* foo = *argv;
+	FILE* fo = fopen(foo, "rb");
 
+	printCode();
 	readPM0(fo);
 	runPM0();
 
