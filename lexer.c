@@ -10,8 +10,50 @@ typedef enum token {
   readsym , elsesym
 } token_type;
 
-int main() {
+union lval {
+  char *id;
+  int num;   // not recognized yet
+} lval;
 
+token_type lex() {
+  char c;
+  // ignore space, tab, newline
+  while ((c=getchar()) == ' ' || c== '\t' || c == '\n')
+    ;
+  if (c == EOF) return nulsym;
 
-   return 0;
+  // identifier
+  if (isalpha(c)) {
+    char sbuf[100], *p = sbuf;
+    do {
+      *p++ = c;
+    } while ((c=getchar()) != EOF && isalnum(c));
+    ungetc(c, stdin);
+    *p = '\0';
+    lval.id = sbuf;
+    return idsym;
+  }
+
+  switch (c) {
+    case '+' :
+      return plussym;
+    case '*' :
+      return multsym;
+    case '(' :
+      return lparensym;
+    case ')' :
+      return rparensym;
+    default  :
+      printf("illegal token\n");
+  }
+}
+
+main() {
+  printf("example lexer\n");
+  token_type tok;
+  while ((tok=lex()) != nulsym) {
+    printf("token type: %d", tok);
+    if (tok == idsym) printf(" semantic value: %s", lval.id);
+    printf("\n");
+  }
 }
