@@ -21,7 +21,6 @@ typedef struct {
 } token;
 
 FILE *pl0Code;
-FILE *codeNoComments;
 char word[13];
 token tokens[1000];
 int tokenNum = 0;
@@ -61,11 +60,10 @@ token_type lex() {
   }
 }
 
-void removeComments(int flag){
+void lexer(int flag){
 
    char c;
    char d;
-   codeNoComments = fopen(fileCodeNoComments, "w");
 
    while(fscanf(pl0Code, "%c", &c) != EOF){
       // Remove comments
