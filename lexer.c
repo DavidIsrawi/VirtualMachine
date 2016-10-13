@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /*PL0 Token Types*/
 typedef enum token {
@@ -10,74 +12,154 @@ typedef enum token {
   readsym , elsesym
 } token_type;
 
-union lval {
-  char *id;
-  int num;   // not recognized yet
-} lval;
-
 typedef struct {
    char value[13];
    token_type type;
 } token;
 
-FILE *pl0Code;
 char word[13];
+char number[13];
 token tokens[1000];
 int tokenNum = 0;
 
-
-
-token_type lex() {
-  char c;
-  // ignore space, tab, newline
-  while ((c=getchar()) == ' ' || c== '\t' || c == '\n')
-    ;
-  if (c == EOF) return nulsym;
-
-  // identifier
-  if (isalpha(c)) {
-    char sbuf[100], *p = sbuf;
-    do {
-      *p++ = c;
-    } while ((c=getchar()) != EOF && isalnum(c));
-    ungetc(c, stdin);
-    *p = '\0';
-    lval.id = sbuf;
-    return idsym;
-  }
-
-  switch (c) {
-    case '+' :
-      return plussym;
-    case '*' :
-      return multsym;
-    case '(' :
-      return lparensym;
-    case ')' :
-      return rparensym;
-    default  :
-      printf("illegal token\n");
-  }
-}
-
-void lexer(int flag){
+void lexer(FILE *pl0Code, int flag){
 
    char c;
    char d;
 
-   while(fscanf(pl0Code, "%c", &c) != EOF){
+   fscanf(pl0Code, "%c", &c);
+   while(c != EOF){
       // Remove comments
       if (flag == 1){
          if (c == '/' && (d = fgetc(pl0Code)) == '*'){
-            c = fgetc(pl0Code);
+            //c = fgetc(pl0Code);
             while (fscanf(pl0Code, "%c", &c) != '*');
             c = fgetc(pl0Code);
          }
       }
 
-      // c is a number
-      if ((int)c >= 48 && (int)c <= 57){
+      // c is a space, tab, or newline
+      else if (c == ' ' || c == '\t' || c == '\n'){
+         printf("%c", c);
+         c = fgetc(pl0Code);
+      }
 
+      // c is a non-numeric/non-alphabetic symbol
+      else if (((int)c >= 40 && (int)c <= 47) || ((int)c >= 58 && (int)c <= 62)){
+         if (c == '('){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "(");
+            tokens[tokenNum++].type = lparentsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == ')'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, ")");
+            tokens[tokenNum++].type = rparentsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '*'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "*");
+            tokens[tokenNum++].type = multsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '+'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "+");
+            tokens[tokenNum++].type = plussym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == ','){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, ",");
+            tokens[tokenNum++].type = commasym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '-'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "-");
+            tokens[tokenNum++].type = minussym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '.'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, ".");
+            tokens[tokenNum++].type = periodsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '/'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "/");
+            tokens[tokenNum++].type = slashsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == ':'){
+            printf("%c", c);
+            c = fgetc(pl0Code);
+            if (c == '='){
+               strcpy(tokens[tokenNum].value, ":=");
+               tokens[tokenNum++].type = becomessym;
+               c = fgetc(pl0Code);
+            }
+            else{
+               printf("Error, : is not a valid token.");
+               exit(0);
+            }
+         }
+         else if (c == ';'){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, ";");
+            tokens[tokenNum++].type = semicolonsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '<'){
+            printf("%c", c);
+            c = fgetc(pl0Code);
+            if (c == '='){
+               printf("%c", c);
+               strcpy(tokens[tokenNum].value, "<=");
+               tokens[tokenNum++].type = leqsym;
+               c = fgetc(pl0Code);
+            }
+            if (c == '>'){
+               printf("%c", c);
+               strcpy(tokens[tokenNum].value, "<>");
+               tokens[tokenNum++].type = neqsym;
+               c = fgetc(pl0Code);
+            }
+            else{
+               strcpy(tokens[tokenNum].value, "<");
+               tokens[tokenNum++].type = lessym;
+               c = fgetc(pl0Code);
+            }
+         }
+         else if (c == '='){
+            printf("%c", c);
+            strcpy(tokens[tokenNum].value, "=");
+            tokens[tokenNum++].type = eqsym;
+            c = fgetc(pl0Code);
+         }
+         else if (c == '>'){
+            printf("%c", c);
+            c = fgetc(pl0Code);
+            if (c == '='){
+               printf("%c", c);
+               strcpy(tokens[tokenNum].value, ">=");
+               tokens[tokenNum++].type = geqsym;
+               c = fgetc(pl0Code);
+            }
+            else{
+               strcpy(tokens[tokenNum].value, ">");
+               tokens[tokenNum++].type = gtrsym;
+               c = fgetc(pl0Code);
+            }
+         }
+      }
+
+      // c is a number
+      else if ((int)c >= 48 && (int)c <= 57){
+         number[0] = c;
       }
       // c is a lowercase letter
       else if ((int)c >= 97 && (int)c <= 122){
@@ -87,10 +169,10 @@ void lexer(int flag){
             word[position++] = c;
             if (position >= 12){
                printf("Error: identifier longer than 12 characters\n");
-               break;
+               exit(0);
             }
             else
-               c = fgetf(pl0Code);
+               c = fgetc(pl0Code);
          }
 
          word[position] = '\0';
@@ -156,14 +238,4 @@ void lexer(int flag){
          }
       }
    }
-}
-
-main() {
-  printf("example lexer\n");
-  token_type tok;
-  while ((tok=lex()) != nulsym) {
-    printf("token type: %d", tok);
-    if (tok == idsym) printf(" semantic value: %s", lval.id);
-    printf("\n");
-  }
 }
