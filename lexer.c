@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /*PL0 Token Types*/
 typedef enum token {
@@ -22,19 +23,37 @@ char number[13];
 token tokens[1000];
 int tokenNum = 0;
 
-void lexer(FILE *pl0Code, int flag){
+void lexer(FILE *pl0Code, int commentRemove){
 
    char c;
-   char d;
+   int flag = 0;
 
    fscanf(pl0Code, "%c", &c);
    while(c != EOF){
-      // Remove comments
-      if (flag == 1){
-         if (c == '/' && (d = fgetc(pl0Code)) == '*'){
-            //c = fgetc(pl0Code);
-            while (fscanf(pl0Code, "%c", &c) != '*');
+      // Deal with comments
+      if (flag){
+         if (commentRemove){
             c = fgetc(pl0Code);
+            if (c == '*'){
+               c = fgetc(pl0Code);
+               if (c == '/'){
+                  flag = 0;
+                  c = fgetc(pl0Code);
+               }
+            }
+         }
+         else{
+            printf("%c", c);
+            c = fgetc(pl0Code);
+            if (c == '*'){
+               printf("%c", c);
+               c = fgetc(pl0Code);
+               if (c == '/'){
+                  flag = 0;
+                  printf("%c", c);
+                  c = fgetc(pl0Code);
+               }
+            }
          }
       }
 
@@ -89,10 +108,16 @@ void lexer(FILE *pl0Code, int flag){
             c = fgetc(pl0Code);
          }
          else if (c == '/'){
-            printf("%c", c);
-            strcpy(tokens[tokenNum].value, "/");
-            tokens[tokenNum++].type = slashsym;
             c = fgetc(pl0Code);
+            // We know it is a comment if * comes right after /
+            if (c == '*'){
+               flag = 1;
+            }
+            else{
+               printf("%c", c);
+               strcpy(tokens[tokenNum].value, "/");
+               tokens[tokenNum++].type = slashsym;
+            }
          }
          else if (c == ':'){
             printf("%c", c);
@@ -158,14 +183,34 @@ void lexer(FILE *pl0Code, int flag){
       }
 
       // c is a number
-      else if ((int)c >= 48 && (int)c <= 57){
-         number[0] = c;
-      }
-      // c is a lowercase letter
-      else if ((int)c >= 97 && (int)c <= 122){
+      else if (isdigit(c)){
          int position = 0;
 
-         while(((int)c >= 48 && (int)c <= 57) || ((int)c >= 97 && (int)c <= 122)){
+         while(isdigit(c)){
+            number[position++] = c;
+            if (position >= 12){
+               printf("Error: number longer than 12 characters\n");
+               exit(0);
+            }
+            else
+               c = fgetc(pl0Code);
+         }
+
+         if (isalpha(c)){
+            printf("Error: invalid identifier\n");
+            exit(0);
+         }
+
+         number[position] = '\0';
+         strcpy(tokens[tokenNum].value, number);
+         tokens[tokenNum++].type = numbersym;
+         printf("%s", number);
+      }
+      // c is a lowercase letter
+      else if (isalpha(c)){
+         int position = 0;
+
+         while(isdigit(c) || isalpha(c)){
             word[position++] = c;
             if (position >= 12){
                printf("Error: identifier longer than 12 characters\n");
@@ -239,3 +284,11 @@ void lexer(FILE *pl0Code, int flag){
       }
    }
 }
+
+// Could use this functions if we want to, I just thought of it now
+/*
+void addToken(char *str, token_type tkn){
+   strcpy(tokens[tokenNum].value, str);
+   tokens[tokenNum++].type = tkn;
+}
+*/
