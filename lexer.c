@@ -23,7 +23,12 @@ char number[13];
 token tokens[1000];
 int tokenNum = 0;
 
-void lexer(FILE *pl0Code, int commentRemove){
+void addToken(char *str, token_type tkn){
+   strcpy(tokens[tokenNum].value, str);
+   tokens[tokenNum++].type = tkn;
+}
+
+void lexer(FILE *pl0Code, int comment_remove){
 
    char c;
    int flag = 0;
@@ -32,7 +37,7 @@ void lexer(FILE *pl0Code, int commentRemove){
    while(c != EOF){
       // Deal with comments
       if (flag){
-         if (commentRemove){
+         if (comment_remove){
             c = fgetc(pl0Code);
             if (c == '*'){
                c = fgetc(pl0Code);
@@ -67,44 +72,37 @@ void lexer(FILE *pl0Code, int commentRemove){
       else if (((int)c >= 40 && (int)c <= 47) || ((int)c >= 58 && (int)c <= 62)){
          if (c == '('){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, "(");
-            tokens[tokenNum++].type = lparentsym;
+            addToken("(", lparentsym);
             c = fgetc(pl0Code);
          }
          else if (c == ')'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, ")");
-            tokens[tokenNum++].type = rparentsym;
+            addToken(")", rparentsym);
             c = fgetc(pl0Code);
          }
          else if (c == '*'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, "*");
-            tokens[tokenNum++].type = multsym;
+            addToken("*", multsym);
             c = fgetc(pl0Code);
          }
          else if (c == '+'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, "+");
-            tokens[tokenNum++].type = plussym;
+            addToken("+", plussym);
             c = fgetc(pl0Code);
          }
          else if (c == ','){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, ",");
-            tokens[tokenNum++].type = commasym;
+            addToken(",", commasym);
             c = fgetc(pl0Code);
          }
          else if (c == '-'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, "-");
-            tokens[tokenNum++].type = minussym;
+            addToken("-", minussym);
             c = fgetc(pl0Code);
          }
          else if (c == '.'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, ".");
-            tokens[tokenNum++].type = periodsym;
+            addToken(".", periodsym);
             c = fgetc(pl0Code);
          }
          else if (c == '/'){
@@ -115,16 +113,14 @@ void lexer(FILE *pl0Code, int commentRemove){
             }
             else{
                printf("%c", c);
-               strcpy(tokens[tokenNum].value, "/");
-               tokens[tokenNum++].type = slashsym;
+               addToken("/", slashsym);
             }
          }
          else if (c == ':'){
             printf("%c", c);
             c = fgetc(pl0Code);
             if (c == '='){
-               strcpy(tokens[tokenNum].value, ":=");
-               tokens[tokenNum++].type = becomessym;
+               addToken(":=", becomessym);
                c = fgetc(pl0Code);
             }
             else{
@@ -134,8 +130,7 @@ void lexer(FILE *pl0Code, int commentRemove){
          }
          else if (c == ';'){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, ";");
-            tokens[tokenNum++].type = semicolonsym;
+            addToken(";", semicolonsym);
             c = fgetc(pl0Code);
          }
          else if (c == '<'){
@@ -143,26 +138,22 @@ void lexer(FILE *pl0Code, int commentRemove){
             c = fgetc(pl0Code);
             if (c == '='){
                printf("%c", c);
-               strcpy(tokens[tokenNum].value, "<=");
-               tokens[tokenNum++].type = leqsym;
+               addToken("<=", leqsym);
                c = fgetc(pl0Code);
             }
             if (c == '>'){
                printf("%c", c);
-               strcpy(tokens[tokenNum].value, "<>");
-               tokens[tokenNum++].type = neqsym;
+               addToken("<>", neqsym);
                c = fgetc(pl0Code);
             }
             else{
-               strcpy(tokens[tokenNum].value, "<");
-               tokens[tokenNum++].type = lessym;
+               addToken("<", lessym);
                c = fgetc(pl0Code);
             }
          }
          else if (c == '='){
             printf("%c", c);
-            strcpy(tokens[tokenNum].value, "=");
-            tokens[tokenNum++].type = eqsym;
+            addToken("=", eqsym);
             c = fgetc(pl0Code);
          }
          else if (c == '>'){
@@ -170,13 +161,11 @@ void lexer(FILE *pl0Code, int commentRemove){
             c = fgetc(pl0Code);
             if (c == '='){
                printf("%c", c);
-               strcpy(tokens[tokenNum].value, ">=");
-               tokens[tokenNum++].type = geqsym;
+               addToken(">=", geqsym);
                c = fgetc(pl0Code);
             }
             else{
-               strcpy(tokens[tokenNum].value, ">");
-               tokens[tokenNum++].type = gtrsym;
+               addToken(">", gtrsym);
                c = fgetc(pl0Code);
             }
          }
@@ -202,8 +191,7 @@ void lexer(FILE *pl0Code, int commentRemove){
          }
 
          number[position] = '\0';
-         strcpy(tokens[tokenNum].value, number);
-         tokens[tokenNum++].type = numbersym;
+         addToken(number, numbersym);
          printf("%s", number);
       }
       // c is a lowercase letter
@@ -222,73 +210,50 @@ void lexer(FILE *pl0Code, int commentRemove){
 
          word[position] = '\0';
          if (strcmp(word, "const") == 0){
-            strcpy(tokens[tokenNum].value, "const");
-            tokens[tokenNum++].type = constsym;
+            addToken("const", constsym);
          }
          else if (strcmp(word, "var") == 0){
-            strcpy(tokens[tokenNum].value, "var");
-            tokens[tokenNum++].type = varsym;
+            addToken("var", varsym);
          }
          else if (strcmp(word, "procedure") == 0){
-            strcpy(tokens[tokenNum].value, "procedure");
-            tokens[tokenNum++].type = procsym;
+            addToken("procedure", procsym);
          }
          else if (strcmp(word, "call") == 0){
-            strcpy(tokens[tokenNum].value, "call");
-            tokens[tokenNum++].type = callsym;
+            addToken("call", callsym);
          }
          else if (strcmp(word, "begin") == 0){
-            strcpy(tokens[tokenNum].value, "begin");
-            tokens[tokenNum++].type = beginsym;
+            addToken("begin", beginsym);
          }
          else if (strcmp(word, "end") == 0){
-            strcpy(tokens[tokenNum].value, "end");
-            tokens[tokenNum++].type = endsym;
+            addToken("end", endsym);
          }
          else if (strcmp(word, "if") == 0){
-            strcpy(tokens[tokenNum].value, "if");
-            tokens[tokenNum++].type = ifsym;
+            addToken("if", ifsym);
          }
          else if (strcmp(word, "then") == 0){
-            strcpy(tokens[tokenNum].value, "then");
-            tokens[tokenNum++].type = thensym;
+            addToken("then", thensym);
          }
          else if (strcmp(word, "else") == 0){
-            strcpy(tokens[tokenNum].value, "else");
-            tokens[tokenNum++].type = elsesym;
+            addToken("else", elsesym);
          }
          else if (strcmp(word, "while") == 0){
-            strcpy(tokens[tokenNum].value, "while");
-            tokens[tokenNum++].type = whilesym;
+            addToken("while", whilesym);
          }
          else if (strcmp(word, "do") == 0){
-            strcpy(tokens[tokenNum].value, "do");
-            tokens[tokenNum++].type = dosym;
+            addToken("do", dosym);
          }
          else if (strcmp(word, "read") == 0){
-            strcpy(tokens[tokenNum].value, "read");
-            tokens[tokenNum++].type = readsym;
+            addToken("read", readsym);
          }
          else if (strcmp(word, "write") == 0){
-            strcpy(tokens[tokenNum].value, "write");
-            tokens[tokenNum++].type = writesym;
+            addToken("write", writesym);
          }
          else if (strcmp(word, "odd") == 0){
-            strcpy(tokens[tokenNum].value, "odd");
-            tokens[tokenNum++].type = oddsym;
+            addToken("odd", oddsym);
          }
          else{
-            strcpy(tokens[tokenNum].value, word);
-            tokens[tokenNum++].type = identsym;
+            addToken(word, identsym);
          }
       }
    }
 }
-
-// Could use this functions if we want to, I just thought of it now
-/*
-void addToken(char *str, token_type tkn){
-   strcpy(tokens[tokenNum].value, str);
-   tokens[tokenNum++].type = tkn;
-}
-*/
