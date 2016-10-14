@@ -18,3 +18,27 @@ David Israwi Yordi - https://github.com/DavidIsrawi
 Tyler Chauhan - https://github.com/tjchauhan
 
 Repository: https://github.com/DavidIsrawi/VirtualMachine
+
+
+___
+
+//Team name: Compiler Builder 16
+//Kenneth Mitchell
+//Georg Anemogiannis
+//David Israwi Yordi
+//Tyler Chauhan
+
+Collaboration file highlighting the contributions of each team member:
+
+For the lexer (lexer.c) we collaborated using GitHub and Slack to write
+the code for the lexical analyzer and error handling. Tyler and Georg worked on the structure of the token analyzer, making sure the we could scan the information with the struct implemented. Kenneth and David worked on printing the data to achieve the expected output. The error handling was mostly made by Tyler, but the team contributed with different cases. Below we have supplied our GitHub usernames and the repository where we worked on lexer.c and from there one will be able to see everyone's contribution.
+
+GitHub Usernames:
+Kenneth Mitchell - https://github.com/kennethmitchelljr
+Georg Anemogiannis - https://github.com/Ganemo
+David Israwi Yordi - https://github.com/DavidIsrawi
+Tyler Chauhan - https://github.com/tjchauhan
+
+Repository: https://github.com/DavidIsrawi/VirtualMachine
+
+

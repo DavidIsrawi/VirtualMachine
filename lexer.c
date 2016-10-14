@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 
 /*PL0 Token Types*/
 typedef enum token {
@@ -32,6 +33,7 @@ void lexer(FILE *pl0Code, int comment_remove){
 
    char c;
    int flag = 0;
+   char *ptr;
 
    fscanf(pl0Code, "%c", &c);
    while(c != EOF){
@@ -194,6 +196,10 @@ void lexer(FILE *pl0Code, int comment_remove){
          }
 
          number[position] = '\0';
+         if (strtol(number, &ptr, 10) > INT_MAX){
+            printf("Error: number greater than INT_MAX\n");
+            exit(0);
+         }
          addToken(number, numbersym);
          printf("%s", number);
       }
