@@ -7,7 +7,7 @@
 typedef enum token
 {
 	nulsym = 1, identsym, numbersym, plussym, minussym,
-	multsym, slashsym, oddsym, eqsym, neqsym, lessym, leqsym,
+	multsym, slashsym, oddsym, eqlsym, neqsym, lessym, leqsym,
 	gtrsym, geqsym, lparentsym, rparentsym, commasym, semicolonsym,
 	periodsym, becomessym, beginsym, endsym, ifsym, thensym,
 	whilesym, dosym, callsym, constsym, varsym, procsym, writesym,
@@ -336,7 +336,79 @@ int proccessTokens(char word[13])
 	{
 		addToken("odd", oddsym);
 	}
-	else
+    else if (strcmp(word, "+") == 0)
+    {
+        addToken("+", plussym);
+    }
+    else if (strcmp(word, "-") == 0)
+	{
+		addToken("-", minussym);
+	}
+    else if (strcmp(word, "*") == 0)
+	{
+		addToken("*", multsym);
+	}
+    else if (strcmp(word, "/") == 0)
+	{
+		addToken("/", slashsym);
+	}
+    else if (strcmp(word, "=") == 0)
+	{
+		addToken("=", eqlsym);
+	}
+    else if (strcmp(word, "<>") == 0)
+	{
+		addToken("<>", neqsym);
+	}
+    else if (strcmp(word, "<=") == 0)
+	{
+		addToken("<=", leqsym);
+	}
+    else if (strcmp(word, "<") == 0)
+    {
+        addToken("<", lessym);
+    }
+    else if (strcmp(word, ">") == 0)
+    {
+        addToken(">", gtrsym);
+    }
+    else if (strcmp(word, ">=") == 0)
+    {
+        addToken(">", geqsym);
+    }
+    else if (strcmp(word, ":=") == 0)
+    {
+        addToken(":=", becomessym);
+    }
+    else if (strcmp(word, ",") == 0)
+    {
+        addToken(",", commasym);
+    }
+    else if (strcmp(word, ";") == 0)
+    {
+        addToken(";", semicolonsym);
+    }
+    else if (strcmp(word, ".") == 0)
+    {
+        addToken(".", periodsym);
+    }
+    else if (strcmp(word, "(") == 0)
+    {
+        addToken("(", lparentsym);
+    }
+    else if (strcmp(word, ")") == 0)
+    {
+        addToken(")", rparentsym);
+    }
+    else if (strcmp(word, "null") == 0 || strcmp(word, "NULL") == 0)
+    {
+        addToken("NULL", nulsym);
+    }
+    else if(isdigit(word))
+    {
+        addToken(word, numbersym);
+    }
+    else
 	{
 		addToken(word, identsym);
 	}
