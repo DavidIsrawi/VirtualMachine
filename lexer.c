@@ -265,6 +265,14 @@ void lexer(FILE *pl0Code, int comment_remove){
     }
 }
 
+void printTable() {
+    int i;
+    printf("Tokens:\n-------\n");
+    for(i = 0; i < tokens.length; i++) {
+        printf("%s %10d\n", tokens[i].value, tokens[i].type);
+    }
+}
+
 int main(void){
     // Just what I used to test it
     /*
