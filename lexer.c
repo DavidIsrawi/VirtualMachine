@@ -269,7 +269,7 @@ void printTable() {
     int i;
     printf("\nTokens:\n-------\n");
     for(i = 0; i < tokens.length; i++) {
-        printf("%10s %d\n", tokens[i].value, tokens[i].type);
+        printf("%s\t\t\t%d\n", tokens[i].value, tokens[i].type);
     }
 }
 
