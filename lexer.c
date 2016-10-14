@@ -109,7 +109,8 @@ void lexer(FILE *pl0Code, int comment_remove){
             c = fgetc(pl0Code);
             // We know it is a comment if * comes right after /
             if (c == '*'){
-               printf("/");
+               if (!comment_remove)
+                  printf("/");
                flag = 1;
             }
             else{
