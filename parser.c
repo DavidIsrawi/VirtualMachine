@@ -1,16 +1,19 @@
-// Compiler Builder 16
-// Kenneth Mitchell
-// Georg Anemogiannis
-// David Israwi Yordi
-// Tyler Chauhan
+/* Compiler Builder 16
+   Kenneth Mitchell
+   Georg Anemogiannis
+   David Israwi Yordi
+   Tyler Chauhan
+*/
 
 #include "header.h"
 
-//Symbol table
+/* Symbol table */
 symbol symbol_table[MAX_SYMBOL_TABLE_SIZE];
-token_type curToken;
 
-//Functions
+/* Current Token */
+token_type currentTok;
+
+/* Functions */
 void program();
 void block();
 void statement();
@@ -18,6 +21,7 @@ void condition();
 void expression();
 void term();
 void factor();
+void getToken();
 void errorMessage(int x);
 
 
@@ -26,6 +30,13 @@ void errorMessage(int x);
 /* program ::= block "." */
 void program()
 {
+  getToken(); //retrieve the token
+  block(); //
+
+  if(currentTok != periodsym)
+  {
+    errorMessage(9);
+  }
 }
 
 /* block ::= const-declaration var-declaration statement */
@@ -68,11 +79,25 @@ void factor()
 
 }
 
+/* function to get the current token */
+void getToken()
+{
+  //still have to write function for getting the token
+}
+
 /* Error messages for the tiny PL/0 Parser */
 void errorMessage(int x)
 {
+  if(x != 0)
+  {
+    printf("Error number %d:  ", x);
+  }
+
   switch(x)
   {
+    case 0:
+      printf("No errors, program is syntactically correct.\n");
+      break;
     case 1:
       printf("Use = instead of :=.\n");
       break;
