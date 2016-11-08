@@ -23,15 +23,52 @@ void errorMessage(int x);
 
 
 
-//<program> ::= block "."
+/* program ::= block "." */
 void program()
 {
+}
 
-
+/* block ::= const-declaration var-declaration statement */
+void block()
+{
 
 }
 
-//Error messages for the tiny PL/0 Parser
+/* statement ::= [ ident “:=” expression
+    | “begin” statement { “;” statement } “end”
+    | “if” condition “then” statement ]
+*/
+void statement()
+{
+
+}
+
+/*condition ::= “odd” expression
+    | expression rel-op expression */
+void condition()
+{
+
+}
+
+/* expression ::= [ “+” | “-” ] term { ( “+” | “-” ) term} */
+void expression()
+{
+
+}
+
+/* term ::= factor { ( “*” | “/” ) factor } */
+void term()
+{
+
+}
+
+/* factor ::= ident | number | “(” expression “)”*/
+void factor()
+{
+
+}
+
+/* Error messages for the tiny PL/0 Parser */
 void errorMessage(int x)
 {
   switch(x)

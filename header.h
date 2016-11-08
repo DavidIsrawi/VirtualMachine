@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Parser Constant
+//Virtual Machine Constants
+#define MAX_STACK_HEIGHT 2000
+#define MAX_CODE_LENGTH 500
+#define MAX_LEXI_LEVELS 3
+
+//Parser Constants
 #define MAX_SYMBOL_TABLE_SIZE 100
 
 typedef struct symbol
