@@ -34,3 +34,5 @@ typedef struct {
 } token;
 
 token tokens[1000];
+
+void program();

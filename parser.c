@@ -47,18 +47,18 @@ void block()
       do {
          getToken();
          if (currentTok.type != identsym)
-            errorMessage();
+            errorMessage(25);
          getToken();
          if (currentTok.type != eqsym)
-            errorMessage();
+            errorMessage(25);
          getToken();
-         if (currentTok.type)!= numbersym)
-            errorMessage();
+         if (currentTok.type != numbersym)
+            errorMessage(25);
          getToken();
       } while(currentTok.type == commasym);
 
       if (currentTok.type != semicolonsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
 
@@ -67,12 +67,12 @@ void block()
       do {
          getToken();
          if (currentTok.type != identsym)
-            errorMessage();
+            errorMessage(25);
          getToken();
       } while(currentTok.type == commasym);
 
       if (currentTok.type != semicolonsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
 
@@ -80,14 +80,14 @@ void block()
    {
       getToken();
       if (currentTok.type != identsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
       if (currentTok.type != semicolonsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
       block();
       if (currentTok.type != semicolonsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
 
@@ -104,7 +104,7 @@ void statement()
    {
       getToken();
       if (currentTok.type != becomessym)
-         errorMessage();
+         errorMessage(25);
       getToken();
       expression();
    }
@@ -112,20 +112,20 @@ void statement()
    {
       getToken();
       if (currentTok.type != identsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
    else if (currentTok.type == beginsym)
    {
       getToken();
       statement();
-      while (currentTok == semicolonsym)
+      while (currentTok.type == semicolonsym)
       {
          getToken();
          statement();
       }
       if (currentTok.type != endsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
    else if (currentTok.type == ifsym)
@@ -133,7 +133,7 @@ void statement()
       getToken();
       condition();
       if (currentTok.type != thensym)
-         errorMessage();
+         errorMessage(25);
       getToken();
       statement();
    }
@@ -142,7 +142,7 @@ void statement()
       getToken();
       condition();
       if (currentTok.type != dosym)
-         errorMessage();
+         errorMessage(25);
       getToken();
       statement();
    }
@@ -160,7 +160,10 @@ void condition()
    else
    {
       expression();
-      if (currentTok.type !=)
+      if (currentTok.type != leqsym || currentTok.type != neqsym || currentTok.type != lessym || currentTok.type != geqsym || currentTok.type != gtrsym || currentTok.type != eqsym)
+         errorMessage(25);
+      getToken();
+      expression();
    }
 }
 
@@ -184,7 +187,7 @@ void term()
     while(currentTok.type == multsym || currentTok.type == slashsym) {
         getToken();
         factor();
-
+        /*
         // If mult - add mult to code
         if(currentTok.type == multsym) {
             print(2, 0, 4);
@@ -193,6 +196,7 @@ void term()
         else {
             print(2, 0, 5);
         }
+        */
     }
 }
 
@@ -208,11 +212,11 @@ void factor()
       getToken();
       expression();
       if (currentTok.type != rparentsym)
-         errorMessage();
+         errorMessage(25);
       getToken();
    }
    else
-      errorMessage();
+      errorMessage(25);
 }
 
 /* function to get the current token */
@@ -242,7 +246,7 @@ void errorMessage(int x)
       printf("= must be followed by a number.\n");
       break;
     case 3:
-      print("Identifier must be followed by a =.\n");
+      printf("Identifier must be followed by a =.\n");
       break;
     case 4:
       printf("const, var, procedure must be followed by identifier.\n");

@@ -279,7 +279,7 @@ void printTable() {
 int main(int argc, char *argv[]){
 
    if(argc != 3){
-      printf("Error");
+      printf("Error\n");
    }
    else{
       FILE *fo = fopen(argv[1], "rb");
@@ -293,7 +293,8 @@ int main(int argc, char *argv[]){
          return 0;
       }
 
-      printTable();
+      //printTable();
+      program();
       fclose(fo);
       fclose(wf);
    }
