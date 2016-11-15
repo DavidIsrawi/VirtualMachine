@@ -331,6 +331,7 @@ void SIO()
 	}
 }
 
+/*
 int main(int argc, char **argv)
 {
 
@@ -343,4 +344,4 @@ int main(int argc, char **argv)
 	runPM0();
 
 	return 0;
-}
+}*/
