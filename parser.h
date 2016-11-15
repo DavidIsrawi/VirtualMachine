@@ -11,6 +11,8 @@
 symbol symbol_table[MAX_SYMBOL_TABLE_SIZE];
 instruction code[MAX_CODE_LENGTH];
 
+int symTableLoc = 0;
+
 /* Current Token */
 token currentTok;
 int tokenNumber = 0;
@@ -26,7 +28,7 @@ void factor();
 void getToken();
 void errorMessage(int x);
 void emit(int op, int l, int m);
-void put_symbol(int kind, char* name, int num, int level, int addr);
+void put_symbol(int kind, char* name, int val, int level, int addr);
 
 int cx = 0;
 
@@ -339,7 +341,11 @@ void emit(int op, int l, int m)
   }
 }
 
-void put_symbol(int kind, char* name, int num, int level, int addr)
+void put_symbol(int kind, char* name, int val, int level, int addr)
 {
-  
+  symbol_table[symTableLoc].kind = kind;
+  strcpy(symbol_table[symTableLoc].name, name);
+  symbol_table[symTableLoc].val = val;
+  symbol_table[symTableLoc].level = level;
+  symbol_table[symTableLoc].addr = addr;
 }
