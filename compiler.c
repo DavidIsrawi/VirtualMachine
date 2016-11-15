@@ -4,10 +4,14 @@
 // David Israwi Yordi
 // Tyler Chauhan
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+int print (int op, int l, int m);
+void term();
+
+int nextToken;
 
 int main(int argc, char **argv)
 {
@@ -23,4 +27,27 @@ int main(int argc, char **argv)
     symbol symbol_table[MAX_SYMBOL_TABLE_SIZE];
 
     return 0;
+}
+
+void term() {
+    factor();
+
+    while(nextToken == multsym || nextToken == slashsym) {
+
+        getNextToken();
+        factor();
+
+        // If mult - add mult to code
+        if(nextToken == multsym) {
+            print(2, 0, 4);
+        }
+        // If div - add div to code
+        else {
+            print(2, 0, 5);
+        }
+    }
+}
+
+int print (int op, int l, int m) {
+
 }
