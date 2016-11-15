@@ -7,38 +7,6 @@
 #define MAX_CODE_LENGTH 500
 #define MAX_LEXI_LEVELS 3
 
-//OP Codes
-// first index is empty string to accomodate the opcode to its correct value
-char* instCode[] = {
-	"",
-	"LIT",
-	"OPR",
-	"LOD",
-	"STO",
-	"CAL",
-	"INC",
-	"JMP",
-	"JPC",
-	"SIO"
-};
-
-//Operator Codes
-char* OPRCode[] = {
-	"RET",
-	"NEG",
-	"ADD",
-	"SUB",
-	"MUL",
-	"DIV",
-	"ODD",
-	"MOD",
-	"EQL",
-	"NEQ",
-	"LSS",
-	"LEQ",
-	"GTR",
-	"GEQ"
-};
 
 //Instruction struct
 typedef struct
