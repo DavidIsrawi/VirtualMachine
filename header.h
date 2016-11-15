@@ -35,4 +35,6 @@ typedef struct {
 
 token tokens[1000];
 
+
+void lexer(FILE*, FILE*, int);
 void program();

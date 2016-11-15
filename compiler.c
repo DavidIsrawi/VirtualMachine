@@ -11,7 +11,6 @@ FILE* readf;
 FILE* writef;
 
 
-lexer(FILE*, FILE*, int);
 
 int main(int argc, char **argv)
 {
