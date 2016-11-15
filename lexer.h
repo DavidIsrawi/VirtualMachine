@@ -276,28 +276,3 @@ void printTable() {
         printf("%s\t\t\t%d\n", tokens[i].value, tokens[i].type);
     }
 }
-
-int main(int argc, char *argv[]){
-
-   if(argc != 3){
-      printf("Error\n");
-   }
-   else{
-      FILE *fo = fopen(argv[1], "rb");
-      FILE *wf = fopen("text.pm0", "w");
-      if (!strcmp(argv[2], "--clean"))
-         lexer(fo, wf, 1);
-      else if (!strcmp(argv[2], "--source"))
-         lexer(fo, wf, 0);
-      else{
-         printf("Error\n");
-         return 0;
-      }
-
-      //printTable();
-      program();
-      fclose(fo);
-      fclose(wf);
-   }
-   return 0;
-}
