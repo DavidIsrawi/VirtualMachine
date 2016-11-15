@@ -9,6 +9,7 @@
 
 /* Symbol table */
 symbol symbol_table[MAX_SYMBOL_TABLE_SIZE];
+instruction code[MAX_CODE_LENGTH];
 
 /* Current Token */
 token currentTok;
@@ -24,7 +25,10 @@ void term();
 void factor();
 void getToken();
 void errorMessage(int x);
+void emit(int op, int l, int m);
+void put_symbol(int kind, char[] name, int num, int level, int addr);
 
+int cx = 0;
 
 /* program ::= block "." */
 void program()
@@ -318,4 +322,24 @@ void errorMessage(int x)
       printf("Error. There was a problem with the code.\n");
   }
   exit(x);
+}
+
+void emit(int op, int l, int m)
+{
+  if(cx > MAX_CODE_LENGTH)
+  {
+    errorMessage(25);
+  }
+  else
+  {
+    code[cx].op = op;
+    code[cx].l = l;
+    code[cx].m = m;
+    cx++;
+  }
+}
+
+void put_symbol(int kind, char[] name, int num, int level, int addr)
+{
+  
 }
