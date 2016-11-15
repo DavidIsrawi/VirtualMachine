@@ -26,7 +26,7 @@ void factor();
 void getToken();
 void errorMessage(int x);
 void emit(int op, int l, int m);
-void put_symbol(int kind, char[] name, int num, int level, int addr);
+void put_symbol(int kind, char* name, int num, int level, int addr);
 
 int cx = 0;
 
@@ -339,7 +339,7 @@ void emit(int op, int l, int m)
   }
 }
 
-void put_symbol(int kind, char[] name, int num, int level, int addr)
+void put_symbol(int kind, char* name, int num, int level, int addr)
 {
   
 }
