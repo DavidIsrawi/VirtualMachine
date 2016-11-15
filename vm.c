@@ -7,13 +7,6 @@
 
 #include "header.h"
 
-// Instruction struct
-typedef struct
-{
-	int op;
-	int  l;
-	int  m;
-} instruction;
 
 // Registers
 int sp = 0;
@@ -21,37 +14,6 @@ int bp = 1;
 int pc = 0;
 instruction ir;
 
-// Instruction Code
-// first index is empty string to accomodate the opcode to its correct value
-char* instCode[] = {
-	"",
-	"LIT",
-	"OPR",
-	"LOD",
-	"STO",
-	"CAL",
-	"INC",
-	"JMP",
-	"JPC",
-	"SIO"
-};
-
-char* OPRCode[] = {
-	"RET",
-	"NEG",
-	"ADD",
-	"SUB",
-	"MUL",
-	"DIV",
-	"ODD",
-	"MOD",
-	"EQL",
-	"NEQ",
-	"LSS",
-	"LEQ",
-	"GTR",
-	"GEQ"
-};
 
 char* SIOCode[] = {
 	"OUT",
