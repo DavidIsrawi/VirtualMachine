@@ -3,8 +3,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include "header.h"
 
-/*PL0 Token Types*/
+/*
 typedef enum token {
   nulsym = 1, identsym, numbersym, plussym, minussym,
   multsym, slashsym, oddsym, eqsym, neqsym, lessym, leqsym,
@@ -13,15 +14,10 @@ typedef enum token {
   whilesym, dosym, callsym, constsym, varsym, procsym, writesym,
   readsym , elsesym
 } token_type;
-
-typedef struct {
-   char value[13];
-   token_type type;
-} token;
+*/
 
 char word[13];
 char number[13];
-token tokens[1000];
 int tokenNum = 0;
 
 void addToken(char *str, token_type tkn){
@@ -29,7 +25,7 @@ void addToken(char *str, token_type tkn){
    tokens[tokenNum++].type = tkn;
 }
 
-void lexer(FILE *pl0Code, int comment_remove){
+void lexer(FILE *pl0Code, FILE *codeFile, int comment_remove){
 
    char c;
    int flag = 0;
@@ -50,14 +46,14 @@ void lexer(FILE *pl0Code, int comment_remove){
             }
          }
          else{
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             c = fgetc(pl0Code);
             if (c == '*'){
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                c = fgetc(pl0Code);
                if (c == '/'){
                   flag = 0;
-                  printf("%c", c);
+                  fprintf(codeFile, "%c", c);
                   c = fgetc(pl0Code);
                }
             }
@@ -66,44 +62,44 @@ void lexer(FILE *pl0Code, int comment_remove){
 
       // c is a space, tab, or newline
       else if ((int)c <= 32){
-         printf("%c", c);
+         fprintf(codeFile, "%c", c);
          c = fgetc(pl0Code);
       }
 
       // c is a non-numeric/non-alphabetic symbol
       else if (((int)c >= 40 && (int)c <= 47) || ((int)c >= 58 && (int)c <= 62)){
          if (c == '('){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken("(", lparentsym);
             c = fgetc(pl0Code);
          }
          else if (c == ')'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken(")", rparentsym);
             c = fgetc(pl0Code);
          }
          else if (c == '*'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken("*", multsym);
             c = fgetc(pl0Code);
          }
          else if (c == '+'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken("+", plussym);
             c = fgetc(pl0Code);
          }
          else if (c == ','){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken(",", commasym);
             c = fgetc(pl0Code);
          }
          else if (c == '-'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken("-", minussym);
             c = fgetc(pl0Code);
          }
          else if (c == '.'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken(".", periodsym);
             c = fgetc(pl0Code);
          }
@@ -112,19 +108,19 @@ void lexer(FILE *pl0Code, int comment_remove){
             // We know it is a comment if * comes right after /
             if (c == '*'){
                if (!comment_remove)
-                  printf("/");
+                  fprintf(codeFile, "%c", '/');
                flag = 1;
             }
             else{
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                addToken("/", slashsym);
             }
          }
          else if (c == ':'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             c = fgetc(pl0Code);
             if (c == '='){
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                addToken(":=", becomessym);
                c = fgetc(pl0Code);
             }
@@ -134,20 +130,20 @@ void lexer(FILE *pl0Code, int comment_remove){
             }
          }
          else if (c == ';'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken(";", semicolonsym);
             c = fgetc(pl0Code);
          }
          else if (c == '<'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             c = fgetc(pl0Code);
             if (c == '='){
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                addToken("<=", leqsym);
                c = fgetc(pl0Code);
             }
             if (c == '>'){
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                addToken("<>", neqsym);
                c = fgetc(pl0Code);
             }
@@ -157,15 +153,15 @@ void lexer(FILE *pl0Code, int comment_remove){
             }
          }
          else if (c == '='){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             addToken("=", eqsym);
             c = fgetc(pl0Code);
          }
          else if (c == '>'){
-            printf("%c", c);
+            fprintf(codeFile, "%c", c);
             c = fgetc(pl0Code);
             if (c == '='){
-               printf("%c", c);
+               fprintf(codeFile, "%c", c);
                addToken(">=", geqsym);
                c = fgetc(pl0Code);
             }
@@ -201,7 +197,7 @@ void lexer(FILE *pl0Code, int comment_remove){
             exit(0);
          }
          addToken(number, numbersym);
-         printf("%s", number);
+         fprintf(codeFile, "%s", number);
       }
       // c is a lowercase letter
       else if (isalpha(c)){
@@ -263,7 +259,7 @@ void lexer(FILE *pl0Code, int comment_remove){
          else{
             addToken(word, identsym);
          }
-         printf("%s", word);
+         fprintf(codeFile, "%s", word);
       }
       else{
          printf("Error.");
@@ -286,11 +282,12 @@ int main(int argc, char *argv[]){
       printf("Error");
    }
    else{
-      FILE* fo = fopen(argv[1], "rb");
+      FILE *fo = fopen(argv[1], "rb");
+      FILE *wf = fopen("text.pm0", "w");
       if (!strcmp(argv[2], "--clean"))
-         lexer(fo, 1);
+         lexer(fo, wf, 1);
       else if (!strcmp(argv[2], "--source"))
-         lexer(fo, 0);
+         lexer(fo, wf, 0);
       else{
          printf("Error\n");
          return 0;
@@ -298,6 +295,7 @@ int main(int argc, char *argv[]){
 
       printTable();
       fclose(fo);
+      fclose(wf);
    }
    return 0;
 }

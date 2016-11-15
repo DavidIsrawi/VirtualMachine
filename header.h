@@ -13,7 +13,7 @@
 typedef struct symbol
 {
   int kind; //const = 1, var = 2, proc = 3
-  char name[12] //name up to 11 characters
+  char name[12]; //name up to 11 characters
   int val; //number (ASCII value)
   int level; //L level
   int addr; //M address
@@ -27,3 +27,10 @@ typedef enum token{
   whilesym, dosym, callsym, constsym, varsym, procsym, writesym,
   readsym , elsesym
 } token_type;
+
+typedef struct {
+   char value[13];
+   token_type type;
+} token;
+
+token tokens[1000];
