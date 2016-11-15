@@ -100,20 +100,81 @@ void block()
 */
 void statement()
 {
-
+   if (currentTok.type == identsym)
+   {
+      getToken();
+      if (currentTok.type != becomessym)
+         errorMessage();
+      getToken();
+      expression();
+   }
+   else if (currentTok.type == callsym)
+   {
+      getToken();
+      if (currentTok.type != identsym)
+         errorMessage();
+      getToken();
+   }
+   else if (currentTok.type == beginsym)
+   {
+      getToken();
+      statement();
+      while (currentTok == semicolonsym)
+      {
+         getToken();
+         statement();
+      }
+      if (currentTok.type != endsym)
+         errorMessage();
+      getToken();
+   }
+   else if (currentTok.type == ifsym)
+   {
+      getToken();
+      condition();
+      if (currentTok.type != thensym)
+         errorMessage();
+      getToken();
+      statement();
+   }
+   else if (currentTok.type == whilesym)
+   {
+      getToken();
+      condition();
+      if (currentTok.type != dosym)
+         errorMessage();
+      getToken();
+      statement();
+   }
 }
 
 /*condition ::= “odd” expression
     | expression rel-op expression */
 void condition()
 {
-
+   if (currentTok.type == oddsym)
+   {
+      getToken();
+      expression();
+   }
+   else
+   {
+      expression();
+      if (currentTok.type !=)
+   }
 }
 
 /* expression ::= [ “+” | “-” ] term { ( “+” | “-” ) term} */
 void expression()
 {
-
+   if (currentTok.type == plussym || currentTok.type == minussym)
+      getToken();
+   term();
+   while (currentTok.type == plussym || currentTok.type == minussym)
+   {
+      getToken();
+      term();
+   }
 }
 
 /* term ::= factor { ( “*” | “/” ) factor } */
