@@ -7,4 +7,21 @@
 
 #include "header.h"
 
+FILE* readf;
+FILE* writef;
 
+
+lexer(FILE*, FILE*, int);
+
+int main(int argc, char **argv)
+{
+	//reading
+	argc--; argv++;
+	readf = fopen(*argv, "rb");
+
+	//writing
+	argc--; argv++;
+	writef = fopen(*argv, "wb");
+
+	lexer(readf, fopen("LexerOutput", "wb"), 1);
+}
