@@ -52,16 +52,28 @@ void block()
 
    if (currentTok.type == constsym)
    {
+	  char* id;
+
       do {
+		  //setting constant name
          getToken();
          if (currentTok.type != identsym)
             errorMessage(25);
+		 id = currentTok.value;
+
+		 //checking if it has an equal sign
          getToken();
          if (currentTok.type != eqsym)
             errorMessage(25);
+
+		 //get value
          getToken();
          if (currentTok.type != numbersym)
             errorMessage(25);
+
+		 //create symbol
+		 put_symbol(1, id, atoi(currentTok.value), 0, 0);
+
          getToken();
       } while(currentTok.type == commasym);
 
@@ -72,16 +84,25 @@ void block()
 
    if (currentTok.type == varsym)
    {
+	   int num_vars;
       do {
          getToken();
          if (currentTok.type != identsym)
             errorMessage(25);
+
+		 //adding variable
+		 num_vars++;
+		 put_symbol(2, currentTok.value, 0, 0, 3 + num_vars);
+
          getToken();
       } while(currentTok.type == commasym);
 
       if (currentTok.type != semicolonsym)
          errorMessage(25);
       getToken();
+
+	  //INC = instCode[6]
+	  emit(6, 0, 4 + num_vars);
    }
 
    while (currentTok.type == procsym)
@@ -143,16 +164,27 @@ void statement()
       if (currentTok.type != thensym)
          errorMessage(25);
       getToken();
+
+	  int ctemp = cx;
+	  emit(8, 0, 0);
       statement();
+	  code[ctemp].m = cx;
    }
    else if (currentTok.type == whilesym)
    {
+	  int cx1, cx2;
+
+	  cx1 = cx;
       getToken();
       condition();
+	  cx2 = cx;
+	  emit(8, 0, 0);
       if (currentTok.type != dosym)
          errorMessage(25);
       getToken();
       statement();
+	  emit(7, 0, cx1);
+	  code[cx2].m = cx;
    }
 }
 
@@ -178,23 +210,48 @@ void condition()
 /* expression ::= [ “+” | “-” ] term { ( “+” | “-” ) term} */
 void expression()
 {
-   if (currentTok.type == plussym || currentTok.type == minussym)
-      getToken();
-   term();
-   while (currentTok.type == plussym || currentTok.type == minussym)
-   {
-      getToken();
-      term();
-   }
+	int addop;
+	if (currentTok.type == plussym || currentTok.type == minussym)
+	{
+		addop = currentTok.type;
+		getToken();
+		term();
+
+		if (addop == minussym)
+			emit(2, 0, 1);
+	}
+	else
+		term();
+
+	while (currentTok.type == plussym || currentTok.type == minussym)
+	{
+		addop = currentTok.type;
+		getToken();
+		term();
+
+		if (addop == plussym)
+			emit(2, 0, 2);
+		else
+			emit(2, 0, 3);
+	}
 }
 
 /* term ::= factor { ( “*” | “/” ) factor } */
 void term()
 {
+	int mulop;
+
     factor();
     while(currentTok.type == multsym || currentTok.type == slashsym) {
+		mulop = currentTok.type;
         getToken();
         factor();
+
+		if (mulop == multsym)
+			emit(2, 0, 4);
+		else
+			emit(2, 0, 5);
+
         /*
         // If mult - add mult to code
         if(currentTok.type == multsym) {
