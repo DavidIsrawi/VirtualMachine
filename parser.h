@@ -223,7 +223,7 @@ void statement()
 	   symbol* sym = get_symbol(currentTok.value);
 
 	   if (currentTok.type == identsym)
-		   emit(4, sym->level, sym->addr);
+		   emit(3, sym->level, sym->addr);
 	   else
 		   emit(1, 0, atoi(currentTok.value));
 
@@ -475,5 +475,5 @@ void writeToFile(FILE *output)
 {
    int i;
    for (i = 0; i < cx; i++)
-      fprintf(output, "%d %d %d\n", code[i].op, code[i].l; code[i].m);
+      fprintf(output, "%d %d %d\n", code[i].op, code[i].l, code[i].m);
 }
