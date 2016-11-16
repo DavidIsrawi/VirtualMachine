@@ -28,7 +28,7 @@ void factor();
 void getToken();
 void errorMessage(int x);
 void emit(int op, int l, int m);
-symbol_table * get_symbol(char *name);
+symbol * get_symbol(char *name);
 void put_symbol(int kind, char* name, int val, int level, int addr);
 
 
@@ -343,7 +343,7 @@ void emit(int op, int l, int m)
   }
 }
 
-symbol_table * get_symbol(char *name)
+symbol * get_symbol(char *name)
 {
   int i;
   for(i = symTableLoc - 1; i >= 0; i--)
@@ -353,7 +353,7 @@ symbol_table * get_symbol(char *name)
       return *name;
     }
   }
-  return null;
+  return NULL;
 }
 
 void put_symbol(int kind, char* name, int val, int level, int addr)
