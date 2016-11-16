@@ -180,6 +180,10 @@ void statement()
 	  int ctemp = cx;
 	  emit(8, 0, 0);
       statement();
+
+	  instruction bob = code[ctemp];
+	  int cxtemp = cx;
+
 	  code[ctemp].m = cx;
    }
    else if (currentTok.type == whilesym)
@@ -195,6 +199,7 @@ void statement()
          errorMessage(18);
       getToken();
       statement();
+	  int cxtemp = cx;
 	  emit(7, 0, cx1);
 	  code[cx2].m = cx;
    }
@@ -249,8 +254,29 @@ void condition()
       expression();
       if (currentTok.type != leqsym && currentTok.type != neqsym && currentTok.type != lessym && currentTok.type != geqsym && currentTok.type != gtrsym && currentTok.type != eqsym)
          errorMessage(20);
+
+	  token curr = currentTok;
+
       getToken();
       expression();
+
+
+	  switch (curr.type)
+	  {
+	  case leqsym: emit(2, 0, 11);
+		  break;
+	  case neqsym: emit(2, 0, 9);
+		  break;
+	  case lessym: emit(2, 0, 10);
+		  break;
+	  case geqsym: emit(2, 0, 13);
+		  break;
+	  case gtrsym: emit(2, 0, 12);
+		  break;
+	  case eqsym: emit(2, 0, 8);
+		  break;
+	  default: errorMessage(26);
+	  }
    }
 }
 
@@ -444,6 +470,8 @@ void emit(int op, int l, int m)
     code[cx].l = l;
     code[cx].m = m;
     cx++;
+
+	//printf("%d %d %d %d\n", op, l, m, cx);
   }
 }
 
