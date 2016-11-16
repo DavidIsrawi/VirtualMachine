@@ -58,18 +58,18 @@ void block()
 		  //setting constant name
          getToken();
          if (currentTok.type != identsym)
-            errorMessage(25);
+            errorMessage(4);
 		 id = currentTok.value;
 
 		 //checking if it has an equal sign
          getToken();
          if (currentTok.type != eqsym)
-            errorMessage(25);
+            errorMessage(3);
 
 		 //get value
          getToken();
          if (currentTok.type != numbersym)
-            errorMessage(25);
+            errorMessage(2);
 
 		 //create symbol
 		 put_symbol(1, id, atoi(currentTok.value), 0, 0);
@@ -78,7 +78,7 @@ void block()
       } while(currentTok.type == commasym);
 
       if (currentTok.type != semicolonsym)
-         errorMessage(25);
+         errorMessage(5);
       getToken();
    }
 
@@ -88,7 +88,7 @@ void block()
       do {
          getToken();
          if (currentTok.type != identsym)
-            errorMessage(25);
+            errorMessage(4);
 
 		 //adding variable
 		 num_vars++;
@@ -98,7 +98,7 @@ void block()
       } while(currentTok.type == commasym);
 
       if (currentTok.type != semicolonsym)
-         errorMessage(25);
+         errorMessage(5);
       getToken();
 
 	  //INC = instCode[6]
@@ -109,14 +109,14 @@ void block()
    {
       getToken();
       if (currentTok.type != identsym)
-         errorMessage(25);
+         errorMessage(4);
       getToken();
       if (currentTok.type != semicolonsym)
-         errorMessage(25);
+         errorMessage(5);
       getToken();
       block();
       if (currentTok.type != semicolonsym)
-         errorMessage(25);
+         errorMessage(55);
       getToken();
    }
 
@@ -133,7 +133,7 @@ void statement()
    {
       getToken();
       if (currentTok.type != becomessym)
-         errorMessage(25);
+         errorMessage(13);
       getToken();
       expression();
    }
@@ -141,7 +141,7 @@ void statement()
    {
       getToken();
       if (currentTok.type != identsym)
-         errorMessage(25);
+         errorMessage(14);
       getToken();
    }
    else if (currentTok.type == beginsym)
@@ -154,7 +154,7 @@ void statement()
          statement();
       }
       if (currentTok.type != endsym)
-         errorMessage(25);
+         errorMessage(8);
       getToken();
    }
    else if (currentTok.type == ifsym)
@@ -162,7 +162,7 @@ void statement()
       getToken();
       condition();
       if (currentTok.type != thensym)
-         errorMessage(25);
+         errorMessage(16);
       getToken();
 
 	  int ctemp = cx;
@@ -180,7 +180,7 @@ void statement()
 	  cx2 = cx;
 	  emit(8, 0, 0);
       if (currentTok.type != dosym)
-         errorMessage(25);
+         errorMessage(18);
       getToken();
       statement();
 	  emit(7, 0, cx1);
@@ -201,7 +201,7 @@ void condition()
    {
       expression();
       if (currentTok.type != leqsym || currentTok.type != neqsym || currentTok.type != lessym || currentTok.type != geqsym || currentTok.type != gtrsym || currentTok.type != eqsym)
-         errorMessage(25);
+         errorMessage(20);
       getToken();
       expression();
    }
@@ -277,11 +277,11 @@ void factor()
       getToken();
       expression();
       if (currentTok.type != rparentsym)
-         errorMessage(25);
+         errorMessage(22);
       getToken();
    }
    else
-      errorMessage(25);
+      errorMessage(23);
 }
 
 /* function to get the current token */
