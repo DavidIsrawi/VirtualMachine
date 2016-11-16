@@ -363,4 +363,6 @@ void put_symbol(int kind, char* name, int val, int level, int addr)
   symbol_table[symTableLoc].val = val;
   symbol_table[symTableLoc].level = level;
   symbol_table[symTableLoc].addr = addr;
+
+  symTableLoc++;
 }
