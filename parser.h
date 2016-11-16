@@ -247,7 +247,7 @@ void condition()
    else
    {
       expression();
-      if (currentTok.type != leqsym || currentTok.type != neqsym || currentTok.type != lessym || currentTok.type != geqsym || currentTok.type != gtrsym || currentTok.type != eqsym)
+      if (currentTok.type != leqsym && currentTok.type != neqsym && currentTok.type != lessym && currentTok.type != geqsym && currentTok.type != gtrsym && currentTok.type != eqsym)
          errorMessage(20);
       getToken();
       expression();
