@@ -423,3 +423,10 @@ void put_symbol(int kind, char* name, int val, int level, int addr)
 
   symTableLoc++;
 }
+
+void writeToFile(FILE *output)
+{
+   int i;
+   for (i = 0; i < cx; i++)
+      fprintf(output, "%d %d %d\n", code[i].op, code[i].l; code[i].m);
+}
