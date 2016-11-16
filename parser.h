@@ -65,6 +65,8 @@ void block()
 
 		 //checking if it has an equal sign
          getToken();
+         if (currentTok.type == becomessym)
+            errorMessage(1);
          if (currentTok.type != eqsym)
             errorMessage(3);
 
