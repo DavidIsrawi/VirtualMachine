@@ -44,12 +44,14 @@ void program()
   {
     errorMessage(9);
   }
+
+  //halt command
+  emit(9, 0, 2);
 }
 
 /* block ::= const-declaration var-declaration statement */
 void block()
 {
-
    if (currentTok.type == constsym)
    {
 	  char* id;
@@ -84,7 +86,7 @@ void block()
 
    if (currentTok.type == varsym)
    {
-	   int num_vars;
+	   int num_vars = 0;
       do {
          getToken();
          if (currentTok.type != identsym)
@@ -129,13 +131,18 @@ void block()
 */
 void statement()
 {
+	token tok = currentTok;
    if (currentTok.type == identsym)
    {
+	   symbol* sym = get_symbol(currentTok.value);
+
       getToken();
       if (currentTok.type != becomessym)
          errorMessage(13);
       getToken();
       expression();
+
+	  emit(4, sym->level, sym->addr);
    }
    else if (currentTok.type == callsym)
    {
@@ -148,11 +155,16 @@ void statement()
    {
       getToken();
       statement();
+	  tok = currentTok;
       while (currentTok.type == semicolonsym)
       {
+
+		  tok = currentTok;
          getToken();
          statement();
       }
+
+	  tok = currentTok;
       if (currentTok.type != endsym)
          errorMessage(8);
       getToken();
@@ -186,6 +198,41 @@ void statement()
 	  emit(7, 0, cx1);
 	  code[cx2].m = cx;
    }
+   else if (currentTok.type == readsym)
+   {
+	   getToken();
+	   if (currentTok.type != identsym)
+		   errorMessage(14);
+	   symbol* sym = get_symbol(currentTok.value);
+
+	   //read input
+	   emit(9, 0, 1);
+
+	   if (currentTok.type == identsym)
+		   emit(4, sym->level, sym->addr);
+	   else
+		   emit(1, 0, atoi(currentTok.value));
+
+	   getToken();
+   }
+   else if (currentTok.type == writesym)
+   {
+	   getToken();
+	   if (currentTok.type != identsym && currentTok.type != numbersym)
+		   errorMessage(14);
+	   symbol* sym = get_symbol(currentTok.value);
+
+	   if (currentTok.type == identsym)
+		   emit(4, sym->level, sym->addr);
+	   else
+		   emit(1, 0, atoi(currentTok.value));
+
+	   //write output
+	   emit(9, 0, 0);
+
+	   getToken();
+   }
+
 }
 
 /*condition ::= “odd” expression
@@ -251,28 +298,26 @@ void term()
 			emit(2, 0, 4);
 		else
 			emit(2, 0, 5);
-
-        /*
-        // If mult - add mult to code
-        if(currentTok.type == multsym) {
-            print(2, 0, 4);
-        }
-        // If div - add div to code
-        else {
-            print(2, 0, 5);
-        }
-        */
     }
 }
 
 /* factor ::= ident | number | “(” expression “)”*/
 void factor()
 {
-   if (currentTok.type == identsym)
-      getToken();
-   else if (currentTok.type == numbersym)
-      getToken();
-   else if (currentTok.type == lparentsym)
+	if (currentTok.type == identsym)
+	{
+		symbol* sym = get_symbol(currentTok.value);
+		emit(3, sym->level, sym->addr);
+
+		getToken();
+	}
+	else if (currentTok.type == numbersym)
+	{
+		emit(1, 0, atoi(currentTok.value));
+
+		getToken();
+	}
+	else if (currentTok.type == lparentsym)
    {
       getToken();
       expression();
@@ -299,8 +344,10 @@ void errorMessage(int x)
   }
   */
 
+	token tok = currentTok;
   switch(x)
   {
+
     case 0:
       printf("No errors, program is syntactically correct.\n");
       break;

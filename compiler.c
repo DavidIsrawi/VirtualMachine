@@ -13,6 +13,13 @@ int main(int argc, char *argv[])
    FILE *wf = fopen("text.pm0", "w");
    lexer(fo, wf, 1);
    program();
+
+   int x;
+   for (x = 0; x < cx; x++)
+   {
+	   printf("%d %d %d\n", code[x].op, code[x].l, code[x].m);
+   }
+
    fclose(fo);
    fclose(wf);
 }
