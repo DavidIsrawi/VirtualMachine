@@ -1,0 +1,5 @@
+var x;
+begin
+  x := 99;
+  x := x + 77;
+end.

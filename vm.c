@@ -130,6 +130,31 @@ void printCode()
 	printf("\n");
 }
 
+void printCodeToFile(FILE* fl)
+{
+	int i;
+
+	fprintf(fl, "PL/0 code:\n\n");
+	for (i = 0; i < code_length; i++)
+	{
+		if (code[i].op == 4 || code[i].op == 5)
+			fprintf(fl, "%d\t%s\t%d\t%d", i, instCode[code[i].op], code[i].l, code[i].m);
+		else if (code[i].op == 9)
+			fprintf(fl, "%d\t%s\t \t ", i, SIOCode[code[i].m]);
+		else if (code[i].op == 2)
+			if (code[i].m != 0)
+				fprintf(fl, "%d\t%s\t \t%d", i, OPRCode[code[i].m], code[i].m);
+			else
+				fprintf(fl, "%d\t%s\t \t ", i, OPRCode[code[i].m]);
+		else
+			fprintf(fl, "%d\t%s\t \t%d", i, instCode[code[i].op], code[i].m);
+
+		fprintf(fl, "\n");
+	}
+
+	fprintf(fl, "\n");
+}
+
 void runPM0()
 {
 	printf("Execution:\n");
@@ -168,6 +193,43 @@ void runPM0()
 	}
 }
 
+void runPM0PrintToFile(FILE* fl)
+{
+	fprintf(fl, "Execution:\n");
+	fprintf(fl, "\t\t\t\tpc\tbp\tsp\tstack\n");
+	fprintf(fl, "\t\t\t\t %d\t %d\t %d\n", pc, bp, sp);
+	while (code_length > 0)
+	{
+		if (code[pc].op == 4 || code[pc].op == 5)
+			fprintf(fl, "%d\t%s\t%d\t%d", pc, instCode[code[pc].op], code[pc].l, code[pc].m);
+		else if (code[pc].op == 9)
+			fprintf(fl, "%d\t%s\t \t ", pc, SIOCode[code[pc].m]);
+		else if (code[pc].op == 2)
+			if (code[pc].m != 0)
+				fprintf(fl, "%d\t%s\t \t%d", pc, OPRCode[code[pc].m], code[pc].m);
+			else
+				fprintf(fl, "%d\t%s\t \t ", pc, OPRCode[code[pc].m]);
+		else
+			fprintf(fl, "%d\t%s\t \t%d", pc, instCode[code[pc].op], code[pc].m);
+
+		fetchCycle();
+		executeCycle();
+		fprintf(fl, "\t%d\t %d\t %d", pc, bp, sp);
+		fprintf(fl, "\t");
+
+		//print stack
+		int x;
+		for (x = 1; x <= sp; x++)
+		{
+			if (x == 7 && sp > 7)
+				printf("| ");
+			fprintf(fl, "%d ", stack[x]);
+		}
+		fprintf(fl, "\n");
+
+		code_length--;
+	}
+}
 void fetchCycle()
 {
 	ir = code[pc];
@@ -325,17 +387,30 @@ void SIO()
 	}
 }
 
+int vmGO(char* filename)
+{
+	FILE* fo = fopen(filename, "rb");
+	FILE* ut = fopen("stacktrace4.txt", "w");
+	readPM0(fo);
+	printCodeToFile(ut);
+	runPM0PrintToFile(ut);
+
+	fclose(fo);
+	fclose(ut);
+}
+
 /*
 int main(int argc, char **argv)
 {
 
 	argc--; argv++;
 	char* foo = *argv;
-	FILE* fo = fopen(foo, "rb");
+	FILE* fo = fopen("input.pm0", "rb");
 
 	readPM0(fo);
 	printCode();
 	runPM0();
 
 	return 0;
-}*/
+}
+*/
