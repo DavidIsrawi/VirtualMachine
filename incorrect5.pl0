@@ -1,0 +1,6 @@
+const z = 23;
+var x, y;
+begin
+   y := 3;
+   x := 5 + (z - y;
+end.

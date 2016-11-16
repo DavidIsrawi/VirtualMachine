@@ -1,0 +1,7 @@
+var x, y;
+begin
+   y := 3;
+   if y < 6 begin
+      x := y + 10;
+   end.
+end.

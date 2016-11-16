@@ -1,0 +1,7 @@
+var x, y;
+begin
+   y := 3;
+   while y < 27 do begin
+      y := y + 10;
+   end.
+end.
