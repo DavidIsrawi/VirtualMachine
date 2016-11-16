@@ -343,14 +343,14 @@ void emit(int op, int l, int m)
   }
 }
 
-symbol * get_symbol(char *name)
+symbol* get_symbol(char *name)
 {
   int i;
   for(i = symTableLoc - 1; i >= 0; i--)
   {
     if(strcmp(name, symbol_table[i].name) == 0)
     {
-      return *name;
+      return &symbol_table[i];
     }
   }
   return NULL;
