@@ -133,7 +133,6 @@ void block()
 */
 void statement()
 {
-	token tok = currentTok;
    if (currentTok.type == identsym)
    {
 	   symbol* sym = get_symbol(currentTok.value);
@@ -157,16 +156,12 @@ void statement()
    {
       getToken();
       statement();
-	  tok = currentTok;
       while (currentTok.type == semicolonsym)
       {
-
-		  tok = currentTok;
          getToken();
          statement();
       }
 
-	  tok = currentTok;
       if (currentTok.type != endsym)
          errorMessage(8);
       getToken();
@@ -182,9 +177,6 @@ void statement()
 	  int ctemp = cx;
 	  emit(8, 0, 0);
       statement();
-
-	  instruction bob = code[ctemp];
-	  int cxtemp = cx;
 
 	  code[ctemp].m = cx;
    }
@@ -371,8 +363,6 @@ void errorMessage(int x)
     printf("Error number %d:  ", x);
   }
   */
-
-	token tok = currentTok;
   switch(x)
   {
 
