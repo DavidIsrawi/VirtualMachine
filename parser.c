@@ -136,11 +136,6 @@ void statement()
          errorMessage(25);
       getToken();
       statement();
-
-      if (currentTok.type == elsesym) {
-          getToken();
-          statement();
-      }
    }
    else if (currentTok.type == whilesym)
    {

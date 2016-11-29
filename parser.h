@@ -179,6 +179,15 @@ void statement()
       statement();
 
 	  code[ctemp].m = cx;
+
+      if (currentTok.type == elsesym) {
+          getToken();
+          int ctemp = cx;
+    	  emit(8, 0, 0);
+          statement();
+
+    	  code[ctemp].m = cx;
+      }
    }
    else if (currentTok.type == whilesym)
    {
