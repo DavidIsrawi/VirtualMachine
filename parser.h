@@ -126,12 +126,13 @@ void block()
       getToken();
       block();
       emit(2, 0, 0);
-      code[temp].m = cx;
+      //code[temp].m = cx;
       level--;
       if (currentTok.type != semicolonsym)
          errorMessage(55);
       getToken();
    }
+   code[temp].m = cx;
 
    //INC = instCode[6]
    emit(6, 0, 4 + num_vars);
