@@ -34,7 +34,6 @@ void put_symbol(int kind, char* name, int val, int level, int addr);
 
 int cx = 0;
 int level = 0;
-int num_vars = 0;
 
 /* program ::= block "." */
 void program()
@@ -55,6 +54,7 @@ void program()
 void block()
 {
    int temp = cx;
+   int num_vars = 0;
    emit(7, 0, 0);
    if (currentTok.type == constsym)
    {
