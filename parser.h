@@ -117,7 +117,7 @@ void block()
       if (currentTok.type != identsym)
          errorMessage(4);
 
-      put_symbol(3, currentTok.value, 0, level, 0);
+      put_symbol(3, currentTok.value, 0, level, cx);
       level++;
 
       getToken();
@@ -144,9 +144,10 @@ void block()
 */
 void statement()
 {
-   symbol* sym = get_symbol(currentTok.value);
    if (currentTok.type == identsym)
    {
+      symbol* sym = get_symbol(currentTok.value);
+
       getToken();
       if (currentTok.type != becomessym)
          errorMessage(13);
@@ -160,7 +161,8 @@ void statement()
       getToken();
       if (currentTok.type != identsym)
          errorMessage(14);
-      //emit(5, sym->level, sym->addr);
+      symbol* sym = get_symbol(currentTok.value);
+      emit(5, level - sym->level, sym->addr);
       getToken();
    }
    else if (currentTok.type == beginsym)
