@@ -125,6 +125,7 @@ void block()
          errorMessage(5);
       getToken();
       block();
+      emit(2, 0, 0);
       code[temp].m = cx;
       level--;
       if (currentTok.type != semicolonsym)
