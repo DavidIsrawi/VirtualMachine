@@ -54,6 +54,7 @@ void program()
 /* block ::= const-declaration var-declaration statement */
 void block()
 {
+   int temp = cx;
    emit(7, 0, 0);
    if (currentTok.type == constsym)
    {
@@ -112,7 +113,6 @@ void block()
 
    while (currentTok.type == procsym)
    {
-      int temp = cx;
       getToken();
       if (currentTok.type != identsym)
          errorMessage(4);
