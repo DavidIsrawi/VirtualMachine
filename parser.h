@@ -53,7 +53,7 @@ void program()
 /* block ::= const-declaration var-declaration statement */
 void block()
 {
-   int temp = cx;
+   int ctemp = cx;
    int num_vars = 0;
    emit(7, 0, 0);
    if (currentTok.type == constsym)
@@ -132,7 +132,7 @@ void block()
          errorMessage(55);
       getToken();
    }
-   code[temp].m = cx;
+   code[ctemp].m = cx;
 
    //INC = instCode[6]
    emit(6, 0, 4 + num_vars);
@@ -197,11 +197,11 @@ void statement()
 
       if (currentTok.type == elsesym) {
           getToken();
-          int ctemp = cx;
-    	  emit(8, 0, 0);
+          int ctemp2 = cx;
+    	  emit(7, 0, 0);
           statement();
 
-    	  code[ctemp].m = cx;
+    	  code[ctemp2].m = cx;
       }
    }
    else if (currentTok.type == whilesym)
