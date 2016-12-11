@@ -65,7 +65,7 @@ void block()
          getToken();
          if (currentTok.type != identsym)
             errorMessage(4);
-		 strcpy(id, &currentTok.value);
+		 strcpy(id, currentTok.value);
 
 		 //checking if it has an equal sign
          getToken();
@@ -352,7 +352,10 @@ void factor()
 	if (currentTok.type == identsym)
 	{
 		symbol* sym = get_symbol(currentTok.value);
-		emit(3, level - sym->level, sym->addr);
+      if (sym->kind == 1)
+         emit(1, 0, sym->val);
+      else
+		    emit(3, level - sym->level, sym->addr);
 
 		getToken();
 	}
