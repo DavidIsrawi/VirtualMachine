@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-//#include "header.h"
 #include "parser.h"
 
 char word[13];
@@ -139,7 +138,7 @@ void lexer(FILE *pl0Code, FILE *codeFile, int comment_remove){
             }
             else{
                addToken("<", lessym);
-               c = fgetc(pl0Code);
+               //c = fgetc(pl0Code);
             }
          }
          else if (c == '='){
@@ -157,7 +156,7 @@ void lexer(FILE *pl0Code, FILE *codeFile, int comment_remove){
             }
             else{
                addToken(">", gtrsym);
-               c = fgetc(pl0Code);
+              // c = fgetc(pl0Code);
             }
          }
       }

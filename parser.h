@@ -33,6 +33,7 @@ void put_symbol(int kind, char* name, int val, int level, int addr);
 
 
 int cx = 0;
+int level = 0;
 
 /* program ::= block "." */
 void program()
@@ -52,16 +53,19 @@ void program()
 /* block ::= const-declaration var-declaration statement */
 void block()
 {
+   int ctemp = cx;
+   int num_vars = 0;
+   emit(7, 0, 0);
    if (currentTok.type == constsym)
    {
-	  char* id;
+	  char id[13];
 
       do {
 		  //setting constant name
          getToken();
          if (currentTok.type != identsym)
             errorMessage(4);
-		 id = currentTok.value;
+		 strcpy(id, &currentTok.value);
 
 		 //checking if it has an equal sign
          getToken();
@@ -76,7 +80,7 @@ void block()
             errorMessage(2);
 
 		 //create symbol
-		 put_symbol(1, id, atoi(currentTok.value), 0, 0);
+		 put_symbol(1, id, atoi(currentTok.value), level, 0);
 
          getToken();
       } while(currentTok.type == commasym);
@@ -88,7 +92,7 @@ void block()
 
    if (currentTok.type == varsym)
    {
-	   int num_vars = 0;
+      num_vars = 0;
       do {
          getToken();
          if (currentTok.type != identsym)
@@ -96,7 +100,7 @@ void block()
 
 		 //adding variable
 		 num_vars++;
-		 put_symbol(2, currentTok.value, 0, 0, 3 + num_vars);
+		 put_symbol(2, currentTok.value, 0, level, 3 + num_vars);
 
          getToken();
       } while(currentTok.type == commasym);
@@ -105,8 +109,6 @@ void block()
          errorMessage(5);
       getToken();
 
-	  //INC = instCode[6]
-	  emit(6, 0, 4 + num_vars);
    }
 
    while (currentTok.type == procsym)
@@ -114,15 +116,26 @@ void block()
       getToken();
       if (currentTok.type != identsym)
          errorMessage(4);
+
+      put_symbol(3, currentTok.value, 0, level, cx);
+      level++;
+
       getToken();
       if (currentTok.type != semicolonsym)
          errorMessage(5);
       getToken();
       block();
+      emit(2, 0, 0);
+      //code[temp].m = cx;
+      level--;
       if (currentTok.type != semicolonsym)
          errorMessage(55);
       getToken();
    }
+   code[ctemp].m = cx;
+
+   //INC = instCode[6]
+   emit(6, 0, 4 + num_vars);
 
    statement();
 }
@@ -135,7 +148,7 @@ void statement()
 {
    if (currentTok.type == identsym)
    {
-	   symbol* sym = get_symbol(currentTok.value);
+      symbol* sym = get_symbol(currentTok.value);
 
       getToken();
       if (currentTok.type != becomessym)
@@ -143,13 +156,15 @@ void statement()
       getToken();
       expression();
 
-	  emit(4, sym->level, sym->addr);
+	  emit(4, level - sym->level, sym->addr);
    }
    else if (currentTok.type == callsym)
    {
       getToken();
       if (currentTok.type != identsym)
          errorMessage(14);
+      symbol* sym = get_symbol(currentTok.value);
+      emit(5, level - sym->level, sym->addr);
       getToken();
    }
    else if (currentTok.type == beginsym)
@@ -179,6 +194,15 @@ void statement()
       statement();
 
 	  code[ctemp].m = cx;
+
+      if (currentTok.type == elsesym) {
+          getToken();
+          int ctemp2 = cx;
+    	  emit(7, 0, 0);
+          statement();
+
+    	  code[ctemp2].m = cx;
+      }
    }
    else if (currentTok.type == whilesym)
    {
@@ -208,7 +232,7 @@ void statement()
 	   emit(9, 0, 1);
 
 	   if (currentTok.type == identsym)
-		   emit(4, sym->level, sym->addr);
+		   emit(4, 0, sym->addr);
 	   else
 		   emit(1, 0, atoi(currentTok.value));
 
@@ -219,10 +243,11 @@ void statement()
 	   getToken();
 	   if (currentTok.type != identsym && currentTok.type != numbersym)
 		   errorMessage(14);
+
 	   symbol* sym = get_symbol(currentTok.value);
 
 	   if (currentTok.type == identsym)
-		   emit(3, sym->level, sym->addr);
+		   emit(3, level - sym->level, sym->addr);
 	   else
 		   emit(1, 0, atoi(currentTok.value));
 
@@ -327,7 +352,7 @@ void factor()
 	if (currentTok.type == identsym)
 	{
 		symbol* sym = get_symbol(currentTok.value);
-		emit(3, sym->level, sym->addr);
+		emit(3, level - sym->level, sym->addr);
 
 		getToken();
 	}
@@ -358,11 +383,6 @@ void getToken()
 /* Error messages for the tiny PL/0 Parser */
 void errorMessage(int x)
 {
-  /*if(x != 0)
-  {
-    printf("Error number %d:  ", x);
-  }
-  */
   switch(x)
   {
 
