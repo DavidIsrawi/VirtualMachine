@@ -246,10 +246,10 @@ void statement()
 
 	   symbol* sym = get_symbol(currentTok.value);
 
-	   if (currentTok.type == identsym)
+	   if (sym->kind == 2)
 		   emit(3, level - sym->level, sym->addr);
 	   else
-		   emit(1, 0, atoi(currentTok.value));
+		   emit(1, 0, sym->val);
 
 	   //write output
 	   emit(9, 0, 0);
@@ -355,7 +355,7 @@ void factor()
       if (sym->kind == 1)
          emit(1, 0, sym->val);
       else
-		    emit(3, level - sym->level, sym->addr);
+		 emit(3, level - sym->level, sym->addr);
 
 		getToken();
 	}
