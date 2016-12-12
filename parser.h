@@ -196,30 +196,32 @@ void statement()
 	  code[ctemp].m = cx;
 
       if (currentTok.type == elsesym) {
-          getToken();
-          int ctemp2 = cx;
-    	  emit(7, 0, 0);
-          statement();
+         code[ctemp].m = cx + 1;
 
-    	  code[ctemp2].m = cx;
+         ctemp = cx;
+         emit(7, 0, 0);
+         getToken();
+         statement();
+
+         code[ctemp].m = cx;
       }
    }
    else if (currentTok.type == whilesym)
    {
-	  int cx1, cx2;
+      int cx1, cx2;
 
-	  cx1 = cx;
+      cx1 = cx;
       getToken();
       condition();
-	  cx2 = cx;
-	  emit(8, 0, 0);
+      cx2 = cx;
+      emit(8, 0, 0);
       if (currentTok.type != dosym)
          errorMessage(18);
       getToken();
       statement();
-	  int cxtemp = cx;
-	  emit(7, 0, cx1);
-	  code[cx2].m = cx;
+      int cxtemp = cx;
+      emit(7, 0, cx1);
+      code[cx2].m = cx;
    }
    else if (currentTok.type == readsym)
    {
